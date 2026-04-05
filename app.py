@@ -86,25 +86,47 @@ def home():
 
 @app.route("/upload", methods=["POST"])
 def upload_file():
+    if "file" not in request.files:
+        return "No file part"
+
     file = request.files["file"]
 
-    if file:
+    if file.filename == "":
+        return "No file selected"
+
+    try:
         s3.upload_fileobj(file, BUCKET_NAME, file.filename)
         return f"Uploaded {file.filename} successfully!"
-    return "No file selected"
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+@app.route("/delete/<filename>")
+def delete_file(filename):
+    try:
+        s3.delete_object(Bucket=BUCKET_NAME, Key=filename)
+        return f"{filename} deleted successfully! <br><a href='/files'>Back</a>"
+    except Exception as e:
+        return f"Error: {str(e)}"
 
 @app.route("/files")
 def list_files():
     response = s3.list_objects_v2(Bucket=BUCKET_NAME)
-
     files = response.get("Contents", [])
 
     file_list = "<h2>Files in S3</h2><ul>"
-    for f in files:
-        file_list += f"<li>{f['Key']}</li>"
-    file_list += "</ul><a href='/'>Back</a>"
 
+    for f in files:
+        filename = f['Key']
+        file_list += f"""
+        <li>
+            {filename}
+            <a href="/delete/{filename}" style="color:red; margin-left:10px;">Delete</a>
+        </li>
+        """
+
+    file_list += "</ul><a href='/'>Back</a>"
     return file_list
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    import os
+app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
