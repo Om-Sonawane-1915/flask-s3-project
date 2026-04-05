@@ -108,6 +108,18 @@ def delete_file(filename):
     except Exception as e:
         return f"Error: {str(e)}"
 
+@app.route("/view/<filename>")
+def view_file(filename):
+    try:
+        url = s3.generate_presigned_url(
+            'get_object',
+            Params={'Bucket': BUCKET_NAME, 'Key': filename},
+            ExpiresIn=3600
+        )
+        return f'<a href="{url}" target="_blank">Open File</a>'
+    except Exception as e:
+        return f"Error: {str(e)}"
+
 @app.route("/files")
 def list_files():
     response = s3.list_objects_v2(Bucket=BUCKET_NAME)
@@ -120,6 +132,7 @@ def list_files():
         file_list += f"""
         <li>
             {filename}
+            <a href="/view/{filename}" target="_blank">View</a>
             <a href="/delete/{filename}" style="color:red; margin-left:10px;">Delete</a>
         </li>
         """
