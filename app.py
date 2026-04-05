@@ -11,14 +11,73 @@ s3 = boto3.client("s3")
 
 # UI
 HTML_PAGE = """
-<h2>Upload File to S3</h2>
-<form method="POST" action="/upload" enctype="multipart/form-data">
-    <input type="file" name="file">
-    <button type="submit">Upload</button>
-</form>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>S3 Upload</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            text-align: center;
+            padding-top: 50px;
+        }
 
-<h2>Files in S3</h2>
-<a href="/files">View Files</a>
+        h2 {
+            color: white;
+        }
+
+        form {
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            width: 300px;
+            box-shadow: 0px 0px 10px gray;
+        }
+
+        input[type="file"] {
+            margin: 10px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4facfe;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #007bff;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Upload File to S3</h2>
+
+    <form method="POST" action="/upload" enctype="multipart/form-data">
+        <input type="file" name="file"><br>
+        <button type="submit">Upload</button>
+    </form>
+
+    <a href="/files">View Files</a>
+</body>
+</html>
 """
 
 @app.route("/")
