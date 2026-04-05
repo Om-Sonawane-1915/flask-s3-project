@@ -21,7 +21,7 @@ This is a Flask-based web application that allows users to:
 
 ### 1. Clone the repository
 git clone https://github.com/Om-Sonawane-1915/flask-s3-project  
-cd your-repo  
+cd flask-s3-project  
 
 ### 2. Create virtual environment
 python3 -m venv venv  
