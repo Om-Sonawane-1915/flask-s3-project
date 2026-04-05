@@ -5,11 +5,11 @@ import os
 app = Flask(__name__)
 
 # S3 configuration
-BUCKET_NAME = "amzn-s3b-1915"  # change this
+BUCKET_NAME = "amzn-s3b-1915"
 
 s3 = boto3.client("s3")
 
-# Simple HTML UI
+# UI
 HTML_PAGE = """
 <h2>Upload File to S3</h2>
 <form method="POST" action="/upload" enctype="multipart/form-data">
